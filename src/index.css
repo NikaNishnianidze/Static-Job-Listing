@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap");
+
+@theme {
+  --color-container: #fff;
+  --color-new: #5ca5a5;
+  --color-featured: #2b3939;
+  --color-divider: #b7c4c4;
+  --color-roles: #5ca5a5;
+
+  --shadow-container: 0px 15px 20px -5px rgba(13, 113, 130, 0.15);
+}
+
+body {
+  font-family: "League Spartan", sans-serif;
+  background-color: #effafa;
+}
+
+header {
+  background-image: url(/public/images/bg-header-mobile.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #5ca5a5;
+}
