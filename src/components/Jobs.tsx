@@ -1,7 +1,8 @@
+import React, { useState } from "react";
 import data from "../data.json";
 import oval from "../../public/images/Oval Copy.svg";
 
-interface Ijobs {
+interface Job {
   id: number;
   company: string;
   logo: string;
@@ -17,127 +18,125 @@ interface Ijobs {
   tools: string[];
 }
 
-const Jobs: React.FC<Ijobs> = () => {
+const Jobs: React.FC = () => {
+  const [filters, setFilters] = useState<string[]>([]);
+
+  const handleFilterClick = (filter: string) => {
+    if (!filters.includes(filter)) {
+      setFilters([...filters, filter]);
+    }
+  };
+
+  const removeFilter = (filter: string) => {
+    setFilters(filters.filter((f) => f !== filter));
+  };
+
+  const clearFilters = () => {
+    setFilters([]);
+  };
+
+  const filterJob = (job: Job) => {
+    const tags = [job.role, job.level, ...job.languages, ...job.tools];
+    return filters.every((filter) => tags.includes(filter));
+  };
+
+  const filteredJobs = filters.length === 0 ? data : data.filter(filterJob);
+
   return (
-    <>
-      <div className="container flex flex-col max-w-[1440px] gap-[40px] mt-[56px] pb-[24px] items-center justify-center ">
-        {data.map((job) => {
-          return (
+    <div className="container flex flex-col max-w-[1440px] gap-[40px] mt-[56px] relative pb-[24px] items-center justify-center">
+      {filters.length > 0 && (
+        <div className="filter-bar bg-white shadow-lg rounded-md p-4 relative top-[-80px] flex items-center gap-4 flex-wrap w-[327px]">
+          {filters.map((filter) => (
             <div
-              className="job-container w-[327px] pb-[24px] rounded-[5px] relative px-[19px] bg-container shadow-container"
-              key={job.id}
+              key={filter}
+              className="flex items-center bg-roles/10 text-[#5CA5A5] font-bold px-2 py-1 rounded"
             >
-              <div className="desktop">
-                <div className="img">
-                  <img
-                    src={job.logo}
-                    alt="job logo"
-                    className="w-[48px] h-[48px] relative top-[-20px] "
-                  />
-                </div>
-                <div className="main">
-                  <div className="name-new-feature flex items-center gap-[33px]">
-                    <div className="name">
-                      <h1 className="text-[#5CA5A5] text-[13px] font-bold">
-                        {job.company}
-                      </h1>
+              {filter}
+              <button
+                onClick={() => removeFilter(filter)}
+                className="ml-2 bg-[#5CA5A5] text-white px-2 rounded"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={clearFilters}
+            className="ml-auto text-[#5CA5A5] font-bold hover:underline"
+          >
+            Clear
+          </button>
+        </div>
+      )}
+
+      {filteredJobs.map((job) => (
+        <div
+          key={job.id}
+          className="job-container w-[327px] pb-[24px] rounded-[5px] relative px-[19px] bg-container shadow-container"
+        >
+          <div className="desktop">
+            <div className="img">
+              <img
+                src={job.logo}
+                alt="job logo"
+                className="w-[48px] h-[48px] relative top-[-20px]"
+              />
+            </div>
+            <div className="main">
+              <div className="name-new-feature flex items-center gap-[33px]">
+                <h1 className="text-[#5CA5A5] text-[13px] font-bold">
+                  {job.company}
+                </h1>
+                <div className="flex items-center gap-[8px]">
+                  {job.new && (
+                    <div className="bg-new text-white rounded-[12px] px-[8px] py-[2px] text-[14px] font-bold">
+                      NEW!
                     </div>
-                    <div className="new-feature flex items-center gap-[8px]">
-                      <div
-                        className={`new ${
-                          job.new
-                            ? "w-[51px] h-[24px] rounded-[12px] bg-new text-center pt-[2px]"
-                            : ""
-                        }`}
-                      >
-                        <p className="text-[#fff] text-[14px] font-bold leading-[-0.108px]">{`${
-                          job.new ? "NEW!" : ""
-                        }`}</p>
-                      </div>
-                      <div
-                        className={`feature ${
-                          job.featured
-                            ? "w-[89px] h-[24px] text-center pt-[2px] bg-featured rounded-[12px] px-[8px]"
-                            : ""
-                        }`}
-                      >
-                        <p className="text-[#fff] text-[14px] font-bold leading-[-0.108px]">{`${
-                          job.featured ? "FEATURED" : ""
-                        }`}</p>
-                      </div>
+                  )}
+                  {job.featured && (
+                    <div className="bg-featured text-white rounded-[12px] px-[8px] py-[2px] text-[14px] font-bold">
+                      FEATURED
                     </div>
-                  </div>
-                  <div className="position mt-[9px]">
-                    <p className="text-[#2B3939] text-[15px] font-bold">
-                      {job.position}
-                    </p>
-                  </div>
-                  <div className="day-time-location flex items-center gap-[10px] mt-[8px]">
-                    <div className="post-time">
-                      <p className="text-[#7C8F8F] text-[16px] font-medium">
-                        {job.postedAt}
-                      </p>
-                    </div>
-                    <div className="oval">
-                      <img src={oval} alt="oval" />
-                    </div>
-                    <div className="time">
-                      <p className="text-[#7C8F8F] text-[16px] font-medium">
-                        {job.contract}
-                      </p>
-                    </div>
-                    <div className="oval">
-                      <img src={oval} alt="oval" />
-                    </div>
-                    <div className="location">
-                      <p className="text-[#7C8F8F] text-[16px] font-medium">
-                        {job.location}
-                      </p>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
-
-              <div className="divider w-[279px] h-[1px] mt-[15px] bg-divider"></div>
-              <div className="role-level-laguanges flex flex-row flex-wrap mt-[16px] gap-[16px] items-center">
-                <div className="role px-[10px] py-[4px] bg-roles/10 rounded-[4px]">
-                  <p className="text-[#5CA5A5] text-[16px] font-bold leading-[-0.123px]">
-                    {job.role}
-                  </p>
-                </div>
-                <div className="level px-[9px] py-[4px] bg-roles/10 rounded-[4px]">
-                  <p className="text-[#5CA5A5] text-[16px] font-bold leading-[-0.123px]">
-                    {job.level}
-                  </p>
-                </div>
-                <div className="languages flex flex-wrap items-center">
-                  {job.languages.map((language) => {
-                    return (
-                      <div className="laguage flex flex-wrap items-center mr-[16px] px-[9px] py-[4px] bg-roles/10 rounded-[4px]">
-                        <p className="text-[#5CA5A5] text-[16px] font-bold leading-[-0.123px]">
-                          {language}
-                        </p>
-                      </div>
-                    );
-                  })}
-                  <div className="tools flex gap-[16px]">
-                    {job.tools?.map((tool) => {
-                      return (
-                        <div className="px-[8px] py-[4px] rounded-[4px] bg-roles/10 flex flex-row">
-                          <p className="text-[#5CA5A5] text-[16px] font-bold leading-[-0.123px]">
-                            {tool}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+              <p className="mt-[9px] text-[#2B3939] text-[15px] font-bold">
+                {job.position}
+              </p>
+              <div className="flex items-center gap-[10px] mt-[8px]">
+                <p className="text-[#7C8F8F] text-[16px] font-medium">
+                  {job.postedAt}
+                </p>
+                <img src={oval} alt="oval" />
+                <p className="text-[#7C8F8F] text-[16px] font-medium">
+                  {job.contract}
+                </p>
+                <img src={oval} alt="oval" />
+                <p className="text-[#7C8F8F] text-[16px] font-medium">
+                  {job.location}
+                </p>
               </div>
             </div>
-          );
-        })}
-      </div>
-    </>
+          </div>
+
+          <div className="divider w-[279px] h-[1px] mt-[15px] bg-divider" />
+
+          <div className="mt-[16px] flex flex-wrap gap-[16px] items-center">
+            {[job.role, job.level, ...job.languages, ...job.tools].map(
+              (tag) => (
+                <div
+                  key={tag}
+                  className="cursor-pointer bg-roles/10 text-[#5CA5A5] text-[16px] font-bold px-[10px] py-[4px] rounded-[4px]"
+                  onClick={() => handleFilterClick(tag)}
+                >
+                  {tag}
+                </div>
+              )
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 };
 
