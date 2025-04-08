@@ -10,6 +10,9 @@
   --color-roles: #5ca5a5;
 
   --shadow-container: 0px 15px 20px -5px rgba(13, 113, 130, 0.15);
+
+  --breakpoint-mb: 375px;
+  --breakpoint-dk: 1440px;
 }
 
 body {
@@ -22,4 +25,10 @@ header {
   background-repeat: no-repeat;
   background-position: center;
   background-color: #5ca5a5;
+}
+
+@media screen and (min-width: 1440px) {
+  header {
+    background-image: url(/public/images/bg-header-desktop.svg);
+  }
 }
