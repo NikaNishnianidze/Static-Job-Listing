@@ -43,7 +43,7 @@ const Jobs: React.FC = () => {
   const filteredJobs = filters.length === 0 ? data : data.filter(filterJob);
 
   return (
-    <div className="container flex flex-col max-w-[1440px] gap-[40px] mt-[56px] relative pb-[24px] items-center justify-center">
+    <div className="container flex flex-col max-w-[1440px] gap-[40px] mt-[56px] relative pb-[24px] items-center justify-center dk:m-auto ">
       {filters.length > 0 && (
         <div className="filter-bar bg-white shadow-lg rounded-md p-4 relative top-[-80px] flex items-center gap-4 flex-wrap w-[327px] dk:w-[1110px]">
           {filters.map((filter) => (
@@ -72,7 +72,7 @@ const Jobs: React.FC = () => {
       {filteredJobs.map((job) => (
         <div
           key={job.id}
-          className="job-container w-[327px] pb-[24px] rounded-[5px] relative px-[19px] bg-container shadow-container dk:w-[1110px] dk:py-[32px] dk:pr-[18px] dk:pl-[35px]"
+          className="job-container w-[327px] pb-[24px] rounded-[5px] relative px-[19px] dk:w-full bg-container shadow-container dk:w-[1110px] dk:py-[32px] dk:pr-[18px] dk:pl-[35px]"
         >
           <div className="div dk:flex dk:flex-row dk:items-center dk:justify-between">
             <div className="desktop dk:flex dk:flex-row dk:gap-[24px]">
